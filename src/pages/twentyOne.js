@@ -155,17 +155,18 @@ const TwentyOne = () => {
                     : <p>Awaiting Deal</p>}
                     </AnimatePresence>
             </div>
-            <div className="cardText">
-                {myPlay ? <p>Hand Total: {myPlay[0]}</p> : <p></p>}
+            <div className="cardTextLower">
+                {myPlay ? <li>Hand Total: {myPlay[0]}</li> : <li></li>}
                 {myPlay[1] !== myPlay[0] && <p> or {myPlay[1]}</p>}
                 {myPlay[1] > 21 && <p>You bust!</p>}
                 {(myPlay[0] === 21 || myPlay[1] === 21) && <p>21! You score 50 points (press STICK)</p>}
 
-                {total ? <p>Your Total = {total} points</p> : <p>0 points</p>}
+                {total ? <li>Your Total = {total} points</li> : <li>0 points</li>}
                 {gameOver === 1 && <div>
                     <p>Game Over</p>
                     <button className="dealMe" onClick={(e) => handleNewGame(e)}>NewGame</button></div>}
-                {highScore ? <p>Your High Score = {highScore} points</p> : <p>No High Score found</p>}
+                
+                {highScore ? <li>Your High Score = {highScore} points</li> : <li>No High Score found</li>}
                 {highScore ? <button className="dealMe" onClick={(e) => handleClearHighScore(e)}>Clear HighScore</button> : <></>}
             </div>
         </div>
