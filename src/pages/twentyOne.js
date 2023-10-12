@@ -138,18 +138,22 @@ const TwentyOne = () => {
                 {saved === 1 && gameOver === 0 && <button className="dealMe" onClick={(e) => handleStick(e)}>Stick</button>}
             </div>
             <div className="cardDeal">
+            <AnimatePresence>
                 {myHand ? myHand.map((myHand, index) =>
-                    <AnimatePresence key={myHand.key}>
+                    
                         <motion.div 
+                            className="cards"
                             initial={{ y: 1000 }}
                             animate={{ y: 0 }}
-                            transition={{ delay: index*0.2, type: "spring", stiffness: 200, damping: 22 }}
-                            exit={{ scale: 0 }} 
+                            transition={{ delay:0.25*index, type: "spring", stiffness: 200, damping: 22 }}
+                            exit={{ x: -1000, transition: {
+                                duration: 0.15}}} 
                             key={myHand.key}>
-                                <img src={`https://deckofcardsapi.com/static/img/${myHand.card}.png`} height={"200px"} width={"120px"} alt={myHand.card} />
+                                <img  src={`https://deckofcardsapi.com/static/img/${myHand.card}.png`}  alt={myHand.card} />
                         </motion.div>
-                    </AnimatePresence>)
+                    )
                     : <p>Awaiting Deal</p>}
+                    </AnimatePresence>
             </div>
             <div className="cardText">
                 {myPlay ? <p>Hand Total: {myPlay[0]}</p> : <p></p>}

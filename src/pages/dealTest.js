@@ -19,18 +19,21 @@ const DealTest = () => {
             <button className="dealMe" onClick={(e) => handleDealCards(e)}>Deal All Cards</button>
 
             <div className="cardDeal">
+            <AnimatePresence>
                 {deck ? deck.map((deck, index) =>
-                <AnimatePresence key={deck.key}>
+                
                 <motion.div 
                     initial={{ y: 1000 }}
                     animate={{ y: 0 }}
-                    transition={{ delay: index*0.1, type: "spring", stiffness: 200, damping: 22 }}
-                    exit={{ scale: 0 }} 
+                    transition={{ delay:0.25*index, type: "spring", stiffness: 200, damping: 22 }}
+                    exit={{ x: -1000, transition: {
+                        duration: 0.15}}} 
                     key={deck.key}>                    
                         <img src={`https://deckofcardsapi.com/static/img/${deck.card}.png`} height={"120px"} width={"70px"} alt={deck.card} />
                         </motion.div>
-                    </AnimatePresence>)
+                    )
                     : <></>}
+                    </AnimatePresence>
             </div>
         </div>
         
