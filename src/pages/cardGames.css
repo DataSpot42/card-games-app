@@ -1,0 +1,61 @@
+.dealMe {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    height: 40px;
+    flex-direction: row;
+    padding: 10px 10px;
+    border: 0;
+    text-decoration: none;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(30px);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: 2px;
+    border-radius: 10%;
+    border-style: solid;
+}
+
+.dealMe:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.cardText {
+    display: flex;
+    list-style-type: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 140%;
+    font-weight: 600;
+    text-shadow: 3px 3px 2px rgba(202, 209, 232, 0.3);
+    color: azure;
+
+}
+.cardDeal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+@media screen and (max-width: 429px) {
+    .cardText {
+        font-size: 100%;
+    }
+    .dealMe {
+        font-size: .5em;
+        margin: 5px;
+        min-width: 33%;
+        /* width: */
+    }
+}
