@@ -133,9 +133,9 @@ const TwentyOne = () => {
 
             </div>
             <div className="button-container">
-                {gameOver === 0 && <><button className="dealMe" onClick={(e) => handleDealme(e)}>Deal</button>
-                    <button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
-                {saved === 1 && gameOver === 0 && <button className="dealMe" onClick={(e) => handleStick(e)}>Stick</button>}
+                {gameOver === 0 && <><button className="dealMe" onClick={(e) => handleDealme(e)}>Deal</button></>}
+                    {saved===1 && gameOver===0 && myPlay[1] < 22 &&<><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
+                {saved === 1 && gameOver === 0 && myPlay[1] < 22 && <button className="dealMe" onClick={(e) => handleStick(e)}>Stick</button>}
             </div>
             <div className="cardDeal">
             <AnimatePresence>
@@ -156,10 +156,10 @@ const TwentyOne = () => {
                     </AnimatePresence>
             </div>
             <div className="cardTextLower">
-                {myPlay ? <li>Hand Total: {myPlay[0]}</li> : <li></li>}
-                {myPlay[1] !== myPlay[0] && <p> or {myPlay[1]}</p>}
-                {myPlay[1] > 21 && <p>You bust!</p>}
-                {(myPlay[0] === 21 || myPlay[1] === 21) && <p>21! You score 50 points (press STICK)</p>}
+                {myPlay ? <>Hand Total: {myPlay[0]}</> : <></>}
+                {myPlay[1] !== myPlay[0] && <> or {myPlay[1]}</>}
+                {myPlay[1] > 21 && <li>You bust!</li>}
+                {(myPlay[0] === 21 || myPlay[1] === 21) && <li>21! You score 50 points (press STICK)</li>}
 
                 {total ? <li>Your Total = {total} points</li> : <li>0 points</li>}
                 {gameOver === 1 && <div>
