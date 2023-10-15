@@ -4,10 +4,12 @@ import MyTotal from "../components/twentyOneTotal";
 import { motion, AnimatePresence } from "framer-motion";
 import './cardGames.css'
 import { getScore, saveScore, deleteScore } from "../components/highScore"
+import InstPopup from "../components/popup"
 
 
 const TwentyOne = () => {
-
+    const instructions = { instruct: "Deal to take 2 cards, take more if you wish. \r\n Near as you dare to 21? \r\n Press STICK to save score.\r\n Keep dealing until you run out of cards to get high score." }
+    console.log(instructions)
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
     const [myPlay, setMyPlay] = useState([])
@@ -57,7 +59,7 @@ const TwentyOne = () => {
             let sumT = sum + myPlay
             setMyPlay(sumT)
         }
-        setSaved(1)     
+        setSaved(1)
 
     }
     const handleAnotherCard = async (e) => {
@@ -121,39 +123,41 @@ const TwentyOne = () => {
         let response = await deleteScore(0)
         let data = await getScore()
         setHighScore(data.highScore)
+
     }
 
     return (
         <div>
-            <div className="cardText">
-                <li>Deal to take 2 cards, take more if you wish</li>
-                <li>Near as you dare to 21? Press STICK to save score</li>
-                <li>Keep dealing until you run out of cards to get high score</li>
-                {deck ? <p>Number of Cards Left: {deck.length}</p> : <></>}
-
+            <div>
+                <InstPopup ins={instructions} />
             </div>
             <div className="button-container">
                 {gameOver === 0 && <><button className="dealMe" onClick={(e) => handleDealme(e)}>Deal</button></>}
-                    {saved===1 && gameOver===0 && myPlay[1] < 22 &&<><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
+                {saved === 1 && gameOver === 0 && myPlay[1] < 22 && <><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
                 {saved === 1 && gameOver === 0 && myPlay[1] < 22 && <button className="dealMe" onClick={(e) => handleStick(e)}>Stick</button>}
             </div>
+            <div className="dealContainter">
             <div className="cardDeal">
-            <AnimatePresence>
-                {myHand ? myHand.map((myHand, index) =>
-                    
-                        <motion.div 
+                <AnimatePresence>
+                    {myHand ? myHand.map((myHand, index) =>
+
+                        <motion.div
                             className="cards"
                             initial={{ y: 1000 }}
                             animate={{ y: 0 }}
-                            transition={{ delay:0.25*index, type: "spring", stiffness: 200, damping: 22 }}
-                            exit={{ x: -1000, transition: {
-                                duration: 0.15}}} 
+                            transition={{ delay: 0.25 * index, type: "spring", stiffness: 200, damping: 22 }}
+                            exit={{
+                                x: -1000, transition: {
+                                    duration: 0.15
+                                }
+                            }}
                             key={myHand.key}>
-                                <img  src={`https://deckofcardsapi.com/static/img/${myHand.card}.png`}  alt={myHand.card} />
+                            <img src={`https://deckofcardsapi.com/static/img/${myHand.card}.png`} alt={myHand.card} />
                         </motion.div>
                     )
-                    : <p>Awaiting Deal</p>}
-                    </AnimatePresence>
+                        : <p>Awaiting Deal</p>}
+                </AnimatePresence>
+            </div>
             </div>
             <div className="cardTextLower">
                 {myPlay ? <>Hand Total: {myPlay[0]}</> : <></>}
@@ -165,7 +169,7 @@ const TwentyOne = () => {
                 {gameOver === 1 && <div>
                     <p>Game Over</p>
                     <button className="dealMe" onClick={(e) => handleNewGame(e)}>NewGame</button></div>}
-                
+
                 {highScore ? <li>Your High Score = {highScore} points</li> : <li>No High Score found</li>}
                 {highScore ? <button className="dealMe" onClick={(e) => handleClearHighScore(e)}>Clear HighScore</button> : <></>}
             </div>
