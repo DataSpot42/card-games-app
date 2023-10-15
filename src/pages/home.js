@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import './cardGames.css'
-import Popup from 'reactjs-popup';
+
 
 const Home=() => {
     const navigate = useNavigate();
