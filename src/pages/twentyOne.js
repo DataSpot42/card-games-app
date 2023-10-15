@@ -13,8 +13,6 @@ const TwentyOne = () => {
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
     const [myPlay, setMyPlay] = useState([])
-    // eslint-disable-next-line
-    const [bust, setBust] = useState(false)
     const [total, setTotal] = useState(0)
     const [gameOver, setGameOver] = useState(0)
     const [saved, setSaved] = useState(0)
@@ -22,7 +20,7 @@ const TwentyOne = () => {
     let score = 0;
     useEffect(() => {
         const fetchScore = async () => {
-            let data = await getScore()   //get items from storage
+            let data = await getScore()   //get highscore from storage
             setHighScore(data.highScore)
         }
         fetchScore()
@@ -32,7 +30,7 @@ const TwentyOne = () => {
         const fetchDeck = async () => {
             let shuffledDeck = CardDealer()
             let ourDeck = await JSON.parse(shuffledDeck);
-            setDeck(ourDeck)
+            setDeck(ourDeck)    // fetch new shuffled deck
             setMyHand([])
         }
         fetchDeck()
@@ -46,9 +44,8 @@ const TwentyOne = () => {
             setMyHand(dealt)
             let whatsLeft = deck
             whatsLeft.splice(0, 2);
-            setDeck(whatsLeft)
+            setDeck(whatsLeft)   //deal 2 cards and take them out of the deck
             sum = MyTotal(dealt)
-            if (sum[0] > 21 && sum[1] > 21) { setBust(true) }
             setMyPlay(sum)
         }
         else {
@@ -60,44 +57,38 @@ const TwentyOne = () => {
             setMyPlay(sumT)
         }
         setSaved(1)
-        
+
         if (sum[0] === 21 || sum[1] === 21) {
             setPerfectHand("dealMe flash")
             console.log(sum)
             console.log("Perfect Hand")
             console.log(perfectHand)
-        } else {setPerfectHand("dealMe")}
+        } else { setPerfectHand("dealMe") }
 
     }
     const handleAnotherCard = async (e) => {
         e.preventDefault()
         let newCard = deck[0]
         let newHand = ([...myHand, newCard])
-        setMyHand(newHand)
+        setMyHand(newHand)  //add another card to hand
         let whatsLeft = deck
         whatsLeft.splice(0, 1);
         setDeck(whatsLeft)
-        let sum = MyTotal(newHand)
-        if (sum[0] > 21 && sum[1] > 21) { setBust(true) }
+        let sum = MyTotal(newHand)        
         setMyPlay(sum)
         setSaved(1)
-        
+
         if (sum[0] === 21 || sum[1] === 21) {
             setPerfectHand("dealMe flash")
             setPerfectHand("dealMe flash")
-            console.log(sum)
-            console.log("Perfect Hand")
-            console.log(perfectHand)}
-            else {setPerfectHand("dealMe")}
-
+        }
+        else { setPerfectHand("dealMe") }  //change button style upon hand being 21
     }
     const handleStick = async (e) => {
         e.preventDefault()
         if (deck.length < 1) {
-
             setGameOver(1)
             setTotal(0)
-
         }
         let subtotal = total
 
@@ -116,11 +107,8 @@ const TwentyOne = () => {
         setPerfectHand("dealMe")
         // eslint-disable-next-line
         let response = await saveScore(subtotal)
-
         let data = await getScore()
-
         setHighScore(data.highScore)
-
         setSaved(0)
     }
     const handleNewGame = async (e) => {
@@ -131,7 +119,7 @@ const TwentyOne = () => {
         setDeck(ourDeck)
         setMyHand([])
         setTotal(0)
-        setMyPlay([0,0])
+        setMyPlay([0, 0])   //reset for new game
 
     }
     const handleClearHighScore = async (e) => {
@@ -142,54 +130,54 @@ const TwentyOne = () => {
         setHighScore(data.highScore)
 
     }
-    
+
     return (
         <div>
             <div>
-                <InstPopup ins={instructions} />
+                <InstPopup ins={instructions} />  {/*popup for instrucions */}
                 {deck ? <div>
-                {deck.length>0 && <div className="cardText">Number of cards left: {deck.length} </div> }
-                {deck.length ===0 && <div className="cardText">Game Over</div>}
-            
-            <div className="button-container">
-                {deck.length>1 && <><button className="dealMe" onClick={(e) => handleDealme(e)}>Deal</button></>}
-                {(saved ===1 && deck.length>0 && deck.length<52) && gameOver === 0 && myPlay[1] < 22 && <><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
-                {(deck.length<52 && saved === 1 && myPlay[1] < 22) && <button className={perfectHand} onClick={(e) => handleStick(e)}>Stick</button>}
-                {(deck.length<2  && saved===0) &&
-                    <button className="dealMe" onClick={(e) => handleNewGame(e)}>NewGame?</button>}
-            </div> </div> : <></>}
+                    {deck.length > 0 && <div className="cardText">Number of cards left: {deck.length} </div>}
+                    {(deck.length === 0 || (deck.length === 1 && myPlay[1] > 21)) && <div className="cardText">Game Over</div>}
+
+                    <div className="button-container">
+                        {deck.length > 1 && <><button className="dealMe" onClick={(e) => handleDealme(e)}>Deal</button></>}
+                        {(saved === 1 && deck.length > 0 && deck.length < 52) && gameOver === 0 && myPlay[1] < 22 && <><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
+                        {(deck.length < 52 && saved === 1 && myPlay[1] < 22) && <button className={perfectHand} onClick={(e) => handleStick(e)}>Stick</button>}
+                        {((deck.length < 2 && saved === 0) || (deck.length < 2 && myPlay[1] > 21)) &&
+                            <button className="dealMe" onClick={(e) => handleNewGame(e)}>NewGame?</button>}
+                    </div> </div> : <></>}  {/*conditional redering to ensure game plays correctly} */}
             </div>
             <div className="dealContainter">
-            <div className="cardDeal">
-                <AnimatePresence>
-                    {myHand ? myHand.map((myHand, index) =>
+                <div className="cardDeal">
+                    <AnimatePresence>
+                        {myHand ? myHand.map((myHand, index) =>
 
-                        <motion.div
-                            className="cards"
-                            initial={{ y: 1000 }}
-                            animate={{ y: 0 }}
-                            transition={{ delay: 0.25 * index, type: "spring", stiffness: 200, damping: 22 }}
-                            exit={{
-                                x: -1000, transition: {
-                                    duration: 0.15
-                                }
-                            }}
-                            key={myHand.key}>
-                            <img src={`https://deckofcardsapi.com/static/img/${myHand.card}.png`} alt={myHand.card} />
-                        </motion.div>
-                    )
-                        : <p>Awaiting Deal</p>}
-                </AnimatePresence>
+                            <motion.div
+                                className="cards"  // deal each hand
+                                initial={{ y: 1000 }}
+                                animate={{ y: 0 }}
+                                transition={{ delay: 0.15 * index, type: "spring", stiffness: 200, damping: 22 }}
+                                exit={{
+                                    x: -1000, transition: {
+                                        duration: 0.15
+                                    }
+                                }}
+                                key={myHand.key}>
+                                <img src={`https://deckofcardsapi.com/static/img/${myHand.card}.png`} alt={myHand.card} />
+                            </motion.div>
+                        )
+                            : <p>Awaiting Deal</p>}
+                    </AnimatePresence>
+                </div>
             </div>
-            </div>
-            <div className="cardTextLower">
+            <div className="cardTextLower">  {/* more condtional redering for scoring system*/}
                 {myPlay ? <>Hand Total: {myPlay[0]}</> : <></>}
                 {myPlay[1] !== myPlay[0] && <> or {myPlay[1]}</>}
                 {myPlay[1] > 21 && <li>You bust!</li>}
                 {(myPlay[0] === 21 || myPlay[1] === 21) && <li>21! You score 50 points (press STICK)</li>}
 
                 {total ? <li>Your Total = {total} points</li> : <li>0 points</li>}
-                
+
 
                 {highScore ? <li>Your High Score = {highScore} points</li> : <li>No High Score found</li>}
                 {highScore ? <button className="dealMe" onClick={(e) => handleClearHighScore(e)}>Clear HighScore</button> : <></>}

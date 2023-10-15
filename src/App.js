@@ -10,10 +10,8 @@ import DealTest from './pages/dealTest'
 const App = () => {
   return (
     <div>
-      <BrowserRouter>
-      
-        <div>
-        
+      <BrowserRouter>      
+        <div>        
         <NavBar />
         <Routes>
         <Route

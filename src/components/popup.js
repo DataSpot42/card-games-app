@@ -1,3 +1,5 @@
+// instructions popup, can be used for multiple games
+
 import React, { useRef } from 'react';
 import Popup from "reactjs-popup"
 import { AnimatePresence, motion, useIsPresent } from "framer-motion"

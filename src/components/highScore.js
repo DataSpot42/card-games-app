@@ -1,4 +1,4 @@
-
+// highscore saved to local storage
 export const getScore = async () => {
     
     let response = JSON.parse(localStorage.getItem('highScore'));

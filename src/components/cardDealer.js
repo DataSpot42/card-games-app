@@ -1,4 +1,4 @@
-
+// card dealing script to be used in multiple games
 import './cardDeal.css'
 
 const CardDealer = () => {
