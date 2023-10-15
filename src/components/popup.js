@@ -6,6 +6,7 @@ import "../pages/cardGames.css"
 
 const InstPopup = ({ins}) => {
     const ref = useRef();
+     // eslint-disable-next-line
     const toggleTooltip = () => ref.current.toggle();
     const isPresent = useIsPresent
     
@@ -15,6 +16,7 @@ const InstPopup = ({ins}) => {
         ref={ref}        
         trigger={          
         <button type="button" className="dealMe insBut">Instructions</button>}>
+            
         <AnimatePresence>
   <motion.div layout
                     variants={{

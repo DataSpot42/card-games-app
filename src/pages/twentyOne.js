@@ -9,7 +9,7 @@ import InstPopup from "../components/popup"
 
 const TwentyOne = () => {
     const instructions = { instruct: "Deal to take 2 cards, take more if you wish. \r\n Near as you dare to 21? \r\n Press STICK to save score.\r\n Keep dealing until you run out of cards to get high score." }
-    console.log(instructions)
+    const [perfectHand, setPerfectHand] = useState("dealMe")
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
     const [myPlay, setMyPlay] = useState([])
@@ -40,19 +40,19 @@ const TwentyOne = () => {
 
     const handleDealme = async (e) => {
         e.preventDefault()
-
-        if (deck.length >= 2) {
+        let sum = 0
+        if (deck.length > 1) {
             let dealt = [deck[0], deck[1]]
             setMyHand(dealt)
             let whatsLeft = deck
             whatsLeft.splice(0, 2);
             setDeck(whatsLeft)
-            let sum = MyTotal(dealt)
+            sum = MyTotal(dealt)
             if (sum[0] > 21 && sum[1] > 21) { setBust(true) }
             setMyPlay(sum)
         }
         else {
-            let sum = 0
+            sum = 0
             if (deck.length === 1) {
                 sum = parseInt(deck[0])
             } else { sum = 0 }
@@ -60,6 +60,13 @@ const TwentyOne = () => {
             setMyPlay(sumT)
         }
         setSaved(1)
+        
+        if (sum[0] === 21 || sum[1] === 21) {
+            setPerfectHand("dealMe flash")
+            console.log(sum)
+            console.log("Perfect Hand")
+            console.log(perfectHand)
+        } else {setPerfectHand("dealMe")}
 
     }
     const handleAnotherCard = async (e) => {
@@ -74,6 +81,14 @@ const TwentyOne = () => {
         if (sum[0] > 21 && sum[1] > 21) { setBust(true) }
         setMyPlay(sum)
         setSaved(1)
+        
+        if (sum[0] === 21 || sum[1] === 21) {
+            setPerfectHand("dealMe flash")
+            setPerfectHand("dealMe flash")
+            console.log(sum)
+            console.log("Perfect Hand")
+            console.log(perfectHand)}
+            else {setPerfectHand("dealMe")}
 
     }
     const handleStick = async (e) => {
@@ -98,6 +113,7 @@ const TwentyOne = () => {
         }
         subtotal = subtotal + score
         setTotal(subtotal)
+        setPerfectHand("dealMe")
         // eslint-disable-next-line
         let response = await saveScore(subtotal)
 
@@ -115,6 +131,7 @@ const TwentyOne = () => {
         setDeck(ourDeck)
         setMyHand([])
         setTotal(0)
+        setMyPlay([0,0])
 
     }
     const handleClearHighScore = async (e) => {
@@ -125,16 +142,22 @@ const TwentyOne = () => {
         setHighScore(data.highScore)
 
     }
-
+    
     return (
         <div>
             <div>
                 <InstPopup ins={instructions} />
-            </div>
+                {deck ? <div>
+                {deck.length>0 && <div className="cardText">Number of cards left: {deck.length} </div> }
+                {deck.length ===0 && <div className="cardText">Game Over</div>}
+            
             <div className="button-container">
-                {gameOver === 0 && <><button className="dealMe" onClick={(e) => handleDealme(e)}>Deal</button></>}
-                {saved === 1 && gameOver === 0 && myPlay[1] < 22 && <><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
-                {saved === 1 && gameOver === 0 && myPlay[1] < 22 && <button className="dealMe" onClick={(e) => handleStick(e)}>Stick</button>}
+                {deck.length>1 && <><button className="dealMe" onClick={(e) => handleDealme(e)}>Deal</button></>}
+                {(saved ===1 && deck.length>0 && deck.length<52) && gameOver === 0 && myPlay[1] < 22 && <><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
+                {(deck.length<52 && saved === 1 && myPlay[1] < 22) && <button className={perfectHand} onClick={(e) => handleStick(e)}>Stick</button>}
+                {(deck.length<2  && saved===0) &&
+                    <button className="dealMe" onClick={(e) => handleNewGame(e)}>NewGame?</button>}
+            </div> </div> : <></>}
             </div>
             <div className="dealContainter">
             <div className="cardDeal">
@@ -166,9 +189,7 @@ const TwentyOne = () => {
                 {(myPlay[0] === 21 || myPlay[1] === 21) && <li>21! You score 50 points (press STICK)</li>}
 
                 {total ? <li>Your Total = {total} points</li> : <li>0 points</li>}
-                {gameOver === 1 && <div>
-                    <p>Game Over</p>
-                    <button className="dealMe" onClick={(e) => handleNewGame(e)}>NewGame</button></div>}
+                
 
                 {highScore ? <li>Your High Score = {highScore} points</li> : <li>No High Score found</li>}
                 {highScore ? <button className="dealMe" onClick={(e) => handleClearHighScore(e)}>Clear HighScore</button> : <></>}
