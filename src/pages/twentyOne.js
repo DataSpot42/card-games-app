@@ -8,7 +8,7 @@ import InstPopup from "../components/popup"
 
 
 const TwentyOne = () => {
-    const instructions = { instruct: "Deal to take 2 cards, take more if you wish. \r\n Near as you dare to 21? \r\n Press STICK to save score.\r\n Keep dealing until you run out of cards to get high score." }
+    const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score." }
     const [perfectHand, setPerfectHand] = useState("dealMe")
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
