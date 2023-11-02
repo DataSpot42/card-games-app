@@ -5,7 +5,8 @@
 
 }
 .popupClass {
-    width: 70%;
+    width: 100%;
+    min-width: 200px;
     margin: auto;
     padding: 10px 4px;
     border: 0;
