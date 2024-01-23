@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import './cardGames.css'
 import { getScore, saveScore, deleteScore } from "../components/highScore"
 import InstPopup from "../components/popup"
+import inst from "../components/instructions";
 
 
 const TwentyOne = () => {
-    const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Maximum hand is 5 cards. \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score. \r\n You get 50pts if you get 21 \r\n 60pts for 21 with 2 cards \r\n 35pts if you stick at 5 cards without going bust \r\n and 75pts if you get 21 with 5 cards" }
+    const instructions = inst()
+    //const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Maximum hand is 5 cards. \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score. \r\n You get 50pts if you get 21 \r\n 60pts for 21 with 2 cards \r\n 35pts if you stick at 5 cards without going bust \r\n and 75pts if you get 21 with 5 cards" }
     const [perfectHand, setPerfectHand] = useState("dealMe")
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
@@ -94,28 +96,30 @@ const TwentyOne = () => {
             setGameOver(1)
             setTotal(0)
         }
-        let subtotal = total
+        let subTotal = total
 
         if (myPlay[1] < 22 || myPlay[0] < 22) {
             if (myPlay[0] >= myPlay[1] && myPlay[0] < 22) { setScore(myPlay[0]); sub=(myPlay[0]) }
             else { setScore(myPlay[1]) }
         }
         if (myPlay[0] === 21 || myPlay[1] === 21) {
-            setScore(50); sub=50; if (myHand.length===2) {setScore(60); sub=60}}        
+            setScore(50); sub=50; if (myHand.length===2) {setScore(60); sub=60}}  
+            // bonus points if you get 21 with 2 cards      
         
-        if (myHand.length===5){ setScore(35); sub=25;
+        if (myHand.length===5){ setScore(35); sub=25; // 35 pts if you get 5 cards without going bust
         if (myPlay[0] === 21 || myPlay[1] === 21) {
-            setScore(75); sub=75}} 
+            setScore(75); sub=75}} // 75 if you get 21 with 5 cards
         if (myPlay[0] > 21 && myPlay[1] > 21) {   // scoring system
-            setScore(0); sub=0
+            setScore(0); sub=0  // bust and you score nothing
         }
         subTotal = total+sub
         
-        console.log(score)
+        
         setTotal(subTotal)
         setPerfectHand("dealMe")
         // eslint-disable-next-line
-        let response = await saveScore(subtotal)
+        let response = await saveScore(subTotal)  
+        //check locally stored highscores, if new total is higher save new score
         let data = await getScore()
         setHighScore(data.highScore)
         setSaved(0)
@@ -123,7 +127,7 @@ const TwentyOne = () => {
     const handleNewGame = async (e) => {
         e.preventDefault()
         setGameOver(0)
-        let shuffledDeck = CardDealer()
+        let shuffledDeck = CardDealer()  //shuffle desk with the CardDealer component
         let ourDeck = await JSON.parse(shuffledDeck);
         setDeck(ourDeck)
         setMyHand([])
@@ -160,7 +164,7 @@ const TwentyOne = () => {
                 <div className="cardDeal">
                     <AnimatePresence>
                         {myHand ? myHand.map((myHand, index) =>
-
+                            // animate on the cards
                             <motion.div
                                 className="cards"  // deal each hand
                                 initial={{ y: 1000 }}
@@ -183,10 +187,10 @@ const TwentyOne = () => {
                 {myPlay ? <>Hand Total: {myPlay[0]}</> : <></>}
                 {myPlay[1] !== myPlay[0] && <> or {myPlay[1]}</>}
                 {myPlay[1] > 21 && <li className="busted">You bust!</li>}
-                {score > 21 && <li className="busted"> You score {score} points</li>}
+                {score > 21 && <li className="busted"> You score {score} points</li> /* If a big score then animate the text */}
                 {(score > 1 && score < 22) && <li> You score {score} points</li>}
 
-                {total ? <li>Your Total = {total} points</li> : <li>0 points</li>}
+                {total ? <li>Your Total = {total} points</li> : <li>0 points</li> /* Update user on scores*/}
 
 
                 {highScore ? <li>Your High Score = {highScore} points</li> : <li>No High Score found</li>}
