@@ -8,7 +8,7 @@ import InstPopup from "../components/popup"
 
 
 const TwentyOne = () => {
-    const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score." }
+    const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score. \r\n You get 50pts if you get 21 \r\n 60pts for 21 with 2 cards \r\n 25pts if you stick at 5 cards without going bust \r\n and 75pts if you get 21 with 5 cards" }
     const [perfectHand, setPerfectHand] = useState("dealMe")
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
@@ -17,7 +17,10 @@ const TwentyOne = () => {
     const [gameOver, setGameOver] = useState(0)
     const [saved, setSaved] = useState(0)
     const [highScore, setHighScore] = useState(0)
-    let score = 0;
+    const [score, setScore] = useState(0)
+    let subTotal=0
+    let sub=0
+    
     useEffect(() => {
         const fetchScore = async () => {
             let data = await getScore()   //get highscore from storage
@@ -39,6 +42,7 @@ const TwentyOne = () => {
     const handleDealme = async (e) => {
         e.preventDefault()
         let sum = 0
+        setScore(0);
         if (deck.length > 1) {
             let dealt = [deck[0], deck[1]]
             setMyHand(dealt)
@@ -93,17 +97,22 @@ const TwentyOne = () => {
         let subtotal = total
 
         if (myPlay[1] < 22 || myPlay[0] < 22) {
-            if (myPlay[0] >= myPlay[1] && myPlay[0] < 22) { score = myPlay[0] }
-            else { score = myPlay[1] }
+            if (myPlay[0] >= myPlay[1] && myPlay[0] < 22) { setScore(myPlay[0]); sub=(myPlay[0]) }
+            else { setScore(myPlay[1]) }
         }
         if (myPlay[0] === 21 || myPlay[1] === 21) {
-            score = 50
-        }
+            setScore(50); sub=50; if (myHand.length===2) {setScore(60); sub=60}}        
+        
+        if (myHand.length===5){ setScore(25); sub=25;
+        if (myPlay[0] === 21 || myPlay[1] === 21) {
+            setScore(75); sub=75}} 
         if (myPlay[0] > 21 && myPlay[1] > 21) {   // scoring system
-            score = 0
+            setScore(0); sub=0
         }
-        subtotal = subtotal + score
-        setTotal(subtotal)
+        subTotal = total+sub
+        
+        console.log(score)
+        setTotal(subTotal)
         setPerfectHand("dealMe")
         // eslint-disable-next-line
         let response = await saveScore(subtotal)
@@ -173,8 +182,9 @@ const TwentyOne = () => {
             <div className="cardTextLower">  {/* more condtional redering for scoring system*/}
                 {myPlay ? <>Hand Total: {myPlay[0]}</> : <></>}
                 {myPlay[1] !== myPlay[0] && <> or {myPlay[1]}</>}
-                {myPlay[1] > 21 && <li>You bust!</li>}
-                {(myPlay[0] === 21 || myPlay[1] === 21) && <li>21! You score 50 points (press STICK)</li>}
+                {myPlay[1] > 21 && <li className="busted">You bust!</li>}
+                {score > 21 && <li className="busted"> You score {score} points</li>}
+                {(score > 1 && score < 22) && <li> You score {score} points</li>}
 
                 {total ? <li>Your Total = {total} points</li> : <li>0 points</li>}
 
@@ -185,4 +195,5 @@ const TwentyOne = () => {
         </div>
     )
 }
+
 export default TwentyOne

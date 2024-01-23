@@ -65,7 +65,7 @@
   @keyframes blinker {
     50% {
         scale: 1.2;
-        background-color: rgba(25, 0, 249, 0.484);
+        background-color: red;
         
         box-shadow: 3px 3px rgba(255, 255, 255, 0.235);
         
@@ -132,6 +132,21 @@
     width: 20%
 
 }
+.busted {
+    color: red;
+    animation: throb 1s linear 2 forwards;     
+    scale: 1.0;    
+  }
+  
+  @keyframes throb {
+    50% {
+        scale: 2;
+        
+        
+    }
+  }    
+
+
 @media screen and (max-width: 429px) {
     .cardText {
         width: 95%;
