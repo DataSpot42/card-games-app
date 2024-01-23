@@ -9,9 +9,7 @@ import inst from "../components/instructions";
 
 
 const TwentyOne = () => {
-    const instructions = inst()
-    //const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Maximum hand is 5 cards. \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score. \r\n You get 50pts if you get 21 \r\n 60pts for 21 with 2 cards \r\n 35pts if you stick at 5 cards without going bust \r\n and 75pts if you get 21 with 5 cards" }
-    const [perfectHand, setPerfectHand] = useState("dealMe")
+    const instructions = inst()   
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
     const [myPlay, setMyPlay] = useState([])
@@ -20,6 +18,7 @@ const TwentyOne = () => {
     const [saved, setSaved] = useState(0)
     const [highScore, setHighScore] = useState(0)
     const [score, setScore] = useState(0)
+    const [perfectHand, setPerfectHand] = useState("dealMe")
     let subTotal=0
     let sub=0
     
@@ -66,9 +65,7 @@ const TwentyOne = () => {
 
         if (sum[0] === 21 || sum[1] === 21) {
             setPerfectHand("dealMe flash")
-            console.log(sum)
-            console.log("Perfect Hand")
-            console.log(perfectHand)
+            
         } else { setPerfectHand("dealMe") }
 
     }
@@ -106,7 +103,7 @@ const TwentyOne = () => {
             setScore(50); sub=50; if (myHand.length===2) {setScore(60); sub=60}}  
             // bonus points if you get 21 with 2 cards      
         
-        if (myHand.length===5){ setScore(35); sub=25; // 35 pts if you get 5 cards without going bust
+        if (myHand.length===5){ setScore(myPlay[0]+10); sub=myPlay[0]+10; // 35 pts if you get 5 cards without going bust
         if (myPlay[0] === 21 || myPlay[1] === 21) {
             setScore(75); sub=75}} // 75 if you get 21 with 5 cards
         if (myPlay[0] > 21 && myPlay[1] > 21) {   // scoring system
