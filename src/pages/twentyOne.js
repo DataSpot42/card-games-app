@@ -8,7 +8,7 @@ import InstPopup from "../components/popup"
 
 
 const TwentyOne = () => {
-    const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Maximum hand is 5 cards. \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score. \r\n You get 50pts if you get 21 \r\n 60pts for 21 with 2 cards \r\n 25pts if you stick at 5 cards without going bust \r\n and 75pts if you get 21 with 5 cards" }
+    const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Maximum hand is 5 cards. \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score. \r\n You get 50pts if you get 21 \r\n 60pts for 21 with 2 cards \r\n 35pts if you stick at 5 cards without going bust \r\n and 75pts if you get 21 with 5 cards" }
     const [perfectHand, setPerfectHand] = useState("dealMe")
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
@@ -103,7 +103,7 @@ const TwentyOne = () => {
         if (myPlay[0] === 21 || myPlay[1] === 21) {
             setScore(50); sub=50; if (myHand.length===2) {setScore(60); sub=60}}        
         
-        if (myHand.length===5){ setScore(25); sub=25;
+        if (myHand.length===5){ setScore(35); sub=25;
         if (myPlay[0] === 21 || myPlay[1] === 21) {
             setScore(75); sub=75}} 
         if (myPlay[0] > 21 && myPlay[1] > 21) {   // scoring system
