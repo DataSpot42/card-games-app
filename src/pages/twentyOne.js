@@ -8,7 +8,7 @@ import InstPopup from "../components/popup"
 
 
 const TwentyOne = () => {
-    const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score. \r\n You get 50pts if you get 21 \r\n 60pts for 21 with 2 cards \r\n 25pts if you stick at 5 cards without going bust \r\n and 75pts if you get 21 with 5 cards" }
+    const instructions = { instruct: "Deal to take 2 cards, \r\n take more if you wish. \r\n Near as you dare to 21? \r\n Maximum hand is 5 cards. \r\n Press STICK to save score.\r\n Keep dealing until you \r\n run out of cards to get high score. \r\n You get 50pts if you get 21 \r\n 60pts for 21 with 2 cards \r\n 25pts if you stick at 5 cards without going bust \r\n and 75pts if you get 21 with 5 cards" }
     const [perfectHand, setPerfectHand] = useState("dealMe")
     const [deck, setDeck] = useState()
     const [myHand, setMyHand] = useState([])
@@ -150,7 +150,7 @@ const TwentyOne = () => {
 
                     <div className="button-container">
                         {deck.length > 1 && <><button className="dealMe" onClick={(e) => handleDealme(e)}>Deal</button></>}
-                        {(saved === 1 && deck.length > 0 && deck.length < 52) && gameOver === 0 && myPlay[1] < 22 && <><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
+                        {(saved === 1 && deck.length > 0 && deck.length < 52 && myHand.length < 5) && gameOver === 0 && myPlay[1] < 22 && <><button className="dealMe" onClick={(e) => handleAnotherCard(e)}>Another Card</button></>}
                         {(deck.length < 52 && saved === 1 && myPlay[1] < 22) && <button className={perfectHand} onClick={(e) => handleStick(e)}>Stick</button>}
                         {((deck.length < 2 && saved === 0) || (deck.length < 2 && myPlay[1] > 21)) &&
                             <button className="dealMe" onClick={(e) => handleNewGame(e)}>NewGame?</button>}
