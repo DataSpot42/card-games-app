@@ -103,10 +103,10 @@ const TwentyOne = () => {
             setScore(50); sub=50; if (myHand.length===2) {setScore(60); sub=60}}  
             // bonus points if you get 21 with 2 cards      
         
-        if (myHand.length===5){ setScore(myPlay[0]+10); sub=myPlay[0]+10; // 35 pts if you get 5 cards without going bust
+        if (myHand.length===5){ setScore(myPlay[0]+10); sub=myPlay[0]+20; // hand +20 you get 5 cards under 21
         if (myPlay[0] === 21 || myPlay[1] === 21) {
             setScore(75); sub=75}} // 75 if you get 21 with 5 cards
-        if (myPlay[0] > 21 && myPlay[1] > 21) {   // scoring system
+        if (myPlay[0] > 21 && myPlay[1] > 21) {   
             setScore(0); sub=0  // bust and you score nothing
         }
         subTotal = total+sub
